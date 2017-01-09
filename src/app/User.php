@@ -9,13 +9,16 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $table = 'authme';
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username', 'uuid', 'realname', 'isLogged', 'lastlogin', 'email', 'password',
     ];
 
     /**
@@ -26,4 +29,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function is_admin() {
+        return $this->group_id === 1;
+    }
+
+    public function isMod() {
+        return $this->group_id === 1;
+    }
 }
