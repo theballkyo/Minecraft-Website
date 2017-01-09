@@ -1,0 +1,19 @@
+.manage {
+    margin-bottom: 10px;
+}
+
+.infomation {
+    border-top: 1px solid #CCCCCC;
+}
+.footer {
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+.list-group-item.download {
+    background: #ffd6a0;
+}
