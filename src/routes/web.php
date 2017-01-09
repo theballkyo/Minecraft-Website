@@ -11,6 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index');
+
+Auth::routes();
+
+Route::resource('/board', 'BoardController');
+Route::get('/board/create', 'BoardController@create');
+
+Route::get('/board/delete/{id}', 'BoardController@deleteConfirm');
+Route::get('/board/reply/{id}', 'BoardController@reply');
+Route::post('/board/reply', 'BoardController@storeReply');
+Route::get('/board/reply', 'BoardController@replyRedirect');
+Route::get('/board/pin/{id}', 'BoardController@pin');
+Route::get('/board/lock/{id}', 'BoardController@lock');
