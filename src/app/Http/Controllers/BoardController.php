@@ -9,6 +9,7 @@ namespace App\Http\Controllers;
 
 use App;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class BoardController extends Controller
 {
@@ -21,20 +22,36 @@ class BoardController extends Controller
 
     /**
      * Show all topics
+     * @param  Request  $request
      *
      * @return Response
      */
     public function index(Request $request) {
-        $topics = App\Topic::with('user', 'category')->orderBy('status', 'desc')->orderBy('updated_at', 'desc')->active();
-        $category = App\Category::all();
-
-        if(!empty($request->cat)) {
-            $topics->where('category_id', (int) $request->cat);
-        }
-
-        $topics = $topics->get();
+        $topics = Cache::remember('topics', 1, function () use ($request) {
+            return $this->getAllTopics((int) $request->cat);
+        });
+        $category = Cache::remember('category', 1, function () {
+           return $category = App\Category::all();
+        });
 
         return view('topic.index', ['topics' => $topics, 'category' => $category]);
+    }
+
+    /**
+     * Get all topics is active
+     *
+     * @param int $category
+     *
+     * @return mixed
+     */
+    private function getAllTopics(int $category) {
+        $topics = App\Topic::with('user', 'category')->orderBy('status', 'desc')->orderBy('updated_at', 'desc')->active();
+
+        if(!empty($category)) {
+            $topics->where('category_id', $category);
+        }
+
+        return $topics->get();
     }
 
     /**
