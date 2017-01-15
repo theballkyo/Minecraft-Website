@@ -16,11 +16,14 @@ Route::get('/', 'HomeController@index');
 Auth::routes();
 
 Route::resource('/board', 'BoardController');
-Route::get('/board/create', 'BoardController@create');
+Route::group(['prefix' => 'board'], function () {
 
-Route::get('/board/delete/{id}', 'BoardController@deleteConfirm');
-Route::get('/board/reply/{id}', 'BoardController@reply');
-Route::post('/board/reply', 'BoardController@storeReply');
-Route::get('/board/reply', 'BoardController@replyRedirect');
-Route::get('/board/pin/{id}', 'BoardController@pin');
-Route::get('/board/lock/{id}', 'BoardController@lock');
+    # Route::get('create', 'BoardController@create');
+
+    Route::get('delete/{id}', 'BoardController@deleteConfirm');
+    Route::get('reply/{id}', 'BoardController@reply');
+    Route::post('reply', 'BoardController@storeReply');
+    Route::get('reply', 'BoardController@replyRedirect');
+    Route::get('pin/{id}', 'BoardController@pin');
+    Route::get('lock/{id}', 'BoardController@lock');
+});
