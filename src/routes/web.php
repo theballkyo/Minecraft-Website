@@ -12,6 +12,14 @@
 */
 
 Route::get('/', 'HomeController@index');
+Route::get('/home', function () {
+    return redirect('/');
+});
+
+Route::get('/logout', function () {
+   auth()->logout();
+   return redirect('/');
+});
 
 Auth::routes();
 
@@ -26,4 +34,8 @@ Route::group(['prefix' => 'board'], function () {
     Route::get('reply', 'BoardController@replyRedirect');
     Route::get('pin/{id}', 'BoardController@pin');
     Route::get('lock/{id}', 'BoardController@lock');
+});
+
+Route::get('/test', function () {
+   return view('home3');
 });

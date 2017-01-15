@@ -27,15 +27,25 @@ class BoardController extends Controller
      * @return Response
      */
     public function index(Request $request) {
-        $cat = (int) $request->cat;
-        $topics = Cache::remember('topics.' . $cat, 1, function () use ($cat) {
-            return $this->getAllTopics($cat);
-        });
-        $category = Cache::remember('category', 1, function () {
-           return $category = App\Category::all();
+        $datas = Cache::remember('topic.all.' . $request->cat, 1, function () use ($request) {
+            $cat = (int) $request->cat;
+            $topics = $this->getAllTopics($cat);
+            $category = App\Category::all();
+            $catName = collect($category)->where('id', $cat);
+
+            if ($catName->isNotEmpty()) {
+                $catName = $catName->first()->title;
+            } else if (!empty($cat)) {
+                return [];
+            }
+
+            return ['topics' => $topics, 'category' => $category, 'cat' => $cat, 'catName' => $catName];
         });
 
-        return view('topic.index', ['topics' => $topics, 'category' => $category]);
+        if (empty($datas)) {
+            return redirect('/board');
+        }
+        return view('board.index', $datas);
     }
 
     /**
@@ -63,13 +73,25 @@ class BoardController extends Controller
      * @return Response
      */
     public function show(Request $request, $id) {
-        $topic = App\Topic::with('comment', 'comment.user')->where('id', $id)->first();
 
-        if (empty($topic)) {
-            return view('errors.topic404');
-        }
+        $datas = Cache::remember('topic.' . $id, 1, function () use ($request, $id){
+            $topic = App\Topic::with('comment', 'comment.user')->where('id', $id)->first();
 
-        return view('topic.show', ['topic' => $topic]);
+            if (empty($topic)) {
+                return view('errors.topic404');
+            }
+
+            $headerTitle = 'Minecraft SkyRack - ' . $topic->title;
+            $headerDescription = strip_tags($topic->body);
+
+            $headerDescription = trim(preg_replace('/\s+/', ' ', $headerDescription));
+            // Remove &nbsp;
+            $headerDescription = str_replace("\xc2\xa0",' ',$headerDescription);
+
+            return compact('topic', 'headerTitle', 'headerDescription');
+        });
+
+        return view('board.show', $datas);
     }
 
     /**
@@ -124,11 +146,11 @@ class BoardController extends Controller
     /**
      * Show reply page
      *
-     * @param  Request  $Request
-     * @param  int      $id
+     * @param Request $request
+     * @param int @id
      * @return Response
      */
-    public function reply(Request $request, $id) {
+    public function reply(Request $request, int $id) {
         $topic = App\Topic::find($id);
 
         if (empty($topic)) {
@@ -141,7 +163,7 @@ class BoardController extends Controller
     /**
      * Store reply of topic
      *
-     * @param  Request  $Request
+     * @param Request $request
      * @return Response
      */
     public function storeReply(Request $request) {
