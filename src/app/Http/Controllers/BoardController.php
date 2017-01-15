@@ -27,8 +27,9 @@ class BoardController extends Controller
      * @return Response
      */
     public function index(Request $request) {
-        $topics = Cache::remember('topics', 1, function () use ($request) {
-            return $this->getAllTopics((int) $request->cat);
+        $cat = (int) $request->cat;
+        $topics = Cache::remember('topics.' . $cat, 1, function () use ($cat) {
+            return $this->getAllTopics($cat);
         });
         $category = Cache::remember('category', 1, function () {
            return $category = App\Category::all();
