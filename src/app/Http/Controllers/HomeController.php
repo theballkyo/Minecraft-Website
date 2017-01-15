@@ -27,6 +27,6 @@ class HomeController extends Controller
         $authme = App\User::all();
         // dd($authme);
 
-        return view('home', ['topics' => $topics, 'authme' => $authme]);
+        return view('home3', ['topics' => $topics, 'authme' => $authme]);
     }
 }

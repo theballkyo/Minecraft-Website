@@ -1,0 +1,50 @@
+.blockquote {
+    background-color: #fafafa;
+}
+.footer {
+    border-top: 1px solid #edf0f2;
+}
+.server-onoff {
+    font-weight: 600;
+    font-size: 1.5em;
+}
+
+.server--on {
+    color: #87d017;
+}
+.server--off {
+    color: #ff5858;
+}
+.server-ip {
+    display: inline;
+    color: #87d017;
+}
+board-title {
+    margin-bottom: 2px;
+}
+
+.board-poster {
+    color: #797979;
+    font-size: 12px;
+}
+
+.board-body {
+    margin-top: 20px;
+}
+
+.breadcrumb li, .breadcrumb li a {
+    font-size: 1em;
+}
+.promo-block-slim {
+    position: relative;
+    z-index: 1;
+    background-size: cover;
+    padding: 0px 0 90px;
+    background-color: #000000;
+}
+.auth {
+    margin-top: 20px;
+}
+.error {
+    color: #ff4141;
+}

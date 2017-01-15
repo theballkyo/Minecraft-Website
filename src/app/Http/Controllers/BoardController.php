@@ -9,6 +9,7 @@ namespace App\Http\Controllers;
 
 use App;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class BoardController extends Controller
 {
@@ -21,20 +22,47 @@ class BoardController extends Controller
 
     /**
      * Show all topics
+     * @param  Request  $request
      *
      * @return Response
      */
     public function index(Request $request) {
-        $topics = App\Topic::with('user', 'category')->orderBy('status', 'desc')->orderBy('updated_at', 'desc')->active();
-        $category = App\Category::all();
+        $datas = Cache::remember('topic.all.' . $request->cat, 1, function () use ($request) {
+            $cat = (int) $request->cat;
+            $topics = $this->getAllTopics($cat);
+            $category = App\Category::all();
+            $catName = collect($category)->where('id', $cat);
 
-        if(!empty($request->cat)) {
-            $topics->where('category_id', (int) $request->cat);
+            if ($catName->isNotEmpty()) {
+                $catName = $catName->first()->title;
+            } else if (!empty($cat)) {
+                return [];
+            }
+
+            return ['topics' => $topics, 'category' => $category, 'cat' => $cat, 'catName' => $catName];
+        });
+
+        if (empty($datas)) {
+            return redirect('/board');
+        }
+        return view('board.index', $datas);
+    }
+
+    /**
+     * Get all topics is active
+     *
+     * @param int $category
+     *
+     * @return mixed
+     */
+    private function getAllTopics(int $category) {
+        $topics = App\Topic::with('user', 'category')->orderBy('status', 'desc')->orderBy('updated_at', 'desc')->active();
+
+        if(!empty($category)) {
+            $topics->where('category_id', $category);
         }
 
-        $topics = $topics->get();
-
-        return view('topic.index', ['topics' => $topics, 'category' => $category]);
+        return $topics->get();
     }
 
     /**
@@ -45,13 +73,25 @@ class BoardController extends Controller
      * @return Response
      */
     public function show(Request $request, $id) {
-        $topic = App\Topic::with('comment', 'comment.user')->where('id', $id)->first();
 
-        if (empty($topic)) {
-            return view('errors.topic404');
-        }
+        $datas = Cache::remember('topic.' . $id, 1, function () use ($request, $id){
+            $topic = App\Topic::with('comment', 'comment.user')->where('id', $id)->first();
 
-        return view('topic.show', ['topic' => $topic]);
+            if (empty($topic)) {
+                return view('errors.topic404');
+            }
+
+            $headerTitle = 'Minecraft SkyRack - ' . $topic->title;
+            $headerDescription = strip_tags($topic->body);
+
+            $headerDescription = trim(preg_replace('/\s+/', ' ', $headerDescription));
+            // Remove &nbsp;
+            $headerDescription = str_replace("\xc2\xa0",' ',$headerDescription);
+
+            return compact('topic', 'headerTitle', 'headerDescription');
+        });
+
+        return view('board.show', $datas);
     }
 
     /**
@@ -106,11 +146,11 @@ class BoardController extends Controller
     /**
      * Show reply page
      *
-     * @param  Request  $Request
-     * @param  int      $id
+     * @param Request $request
+     * @param int @id
      * @return Response
      */
-    public function reply(Request $request, $id) {
+    public function reply(Request $request, int $id) {
         $topic = App\Topic::find($id);
 
         if (empty($topic)) {
@@ -123,7 +163,7 @@ class BoardController extends Controller
     /**
      * Store reply of topic
      *
-     * @param  Request  $Request
+     * @param Request $request
      * @return Response
      */
     public function storeReply(Request $request) {
