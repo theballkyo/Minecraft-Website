@@ -10,7 +10,7 @@
     <meta name="keywords" content="{{ $headerKeywords or 'มายคราฟ สกายแร็ค,  minecraft skyrack, เซิฟมายคราฟล่าสุด,  minecraft server, มายคราฟ สร้างบ้าน' }}">
 
     <!-- GLOBAL MANDATORY STYLES -->
-    <link href="http://fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet" type="text/css">
     <link href="{{ url('/vendor/simple-line-icons/css/simple-line-icons.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ url('/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
 
