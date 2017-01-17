@@ -10,18 +10,18 @@
     <meta name="keywords" content="{{ $headerKeywords or 'มายคราฟ สกายแร็ค,  minecraft skyrack, เซิฟมายคราฟล่าสุด,  minecraft server, มายคราฟ สร้างบ้าน' }}">
 
     <!-- GLOBAL MANDATORY STYLES -->
-    <link href="http://fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet" type="text/css">
-    <link href="{{ url('vendor/simple-line-icons/css/simple-line-icons.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ url('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="//fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet" type="text/css">
+    <link href="{{ url('/vendor/simple-line-icons/css/simple-line-icons.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ url('/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
 
     <!-- PAGE LEVEL PLUGIN STYLES -->
-    <link href="{{ url('css/animate.css') }}" rel="stylesheet">
-    <link href="{{ url('vendor/swiper/css/swiper.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ url('vendor/magnific-popup/magnific-popup.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ url('/css/animate.css') }}" rel="stylesheet">
+    <link href="{{ url('/vendor/swiper/css/swiper.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ url('/vendor/magnific-popup/magnific-popup.css') }}" rel="stylesheet" type="text/css"/>
 
     <!-- THEME STYLES -->
-    <link href="{{ url('css/layout.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ url('css/skyrack.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ url('/css/layout.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ url('/css/skyrack.css') }}" rel="stylesheet" type="text/css"/>
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico"/>
 </head>
@@ -80,7 +80,7 @@
     <!-- Copyright -->
     <div class="content container">
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-6">Render at {{ date(DATE_RFC2822) }}
             </div>
             <div class="col-xs-6 text-right">
                 <p class="margin-b-0"><a class="fweight-700" href="https://mc-skyrack.tk">MC SkyRack</a> Theme Powered by: <a class="fweight-700" href="http://www.keenthemes.com/">KeenThemes.com</a></p>
@@ -97,28 +97,28 @@
 
 <!-- JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- CORE PLUGINS -->
-<script src="{{ url('vendor/jquery.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('vendor/jquery-migrate.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('vendor/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/jquery.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/jquery-migrate.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
 
 <!-- PAGE LEVEL PLUGINS -->
-<script src="{{ url('vendor/jquery.easing.js') }}" type="text/javascript"></script>
-<script src="{{ url('vendor/jquery.back-to-top.js') }}" type="text/javascript"></script>
-<script src="{{ url('vendor/jquery.smooth-scroll.js') }}" type="text/javascript"></script>
-<script src="{{ url('vendor/jquery.wow.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('vendor/swiper/js/swiper.jquery.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('vendor/magnific-popup/jquery.magnific-popup.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('vendor/masonry/jquery.masonry.pkgd.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('vendor/masonry/imagesloaded.pkgd.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/jquery.easing.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/jquery.back-to-top.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/jquery.smooth-scroll.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/jquery.wow.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/swiper/js/swiper.jquery.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/magnific-popup/jquery.magnific-popup.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/masonry/jquery.masonry.pkgd.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/vendor/masonry/imagesloaded.pkgd.min.js') }}" type="text/javascript"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsXUGTFS09pLVdsYEE9YrO2y4IAncAO2U&amp;callback=initMap" async defer></script>
 
 <!-- PAGE LEVEL SCRIPTS -->
-<script src="{{ url('js/layout.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('js/components/wow.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('js/components/swiper.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('js/components/maginific-popup.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('js/components/masonry.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('js/components/gmap.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/js/layout.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/js/components/wow.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/js/components/swiper.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/js/components/maginific-popup.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/js/components/masonry.min.js') }}" type="text/javascript"></script>
+<script src="{{ url('/js/components/gmap.min.js') }}" type="text/javascript"></script>
 
 @yield('script')
 </body>

@@ -24,10 +24,10 @@ class BoardController extends Controller
      * Show all topics
      * @param  Request  $request
      *
-     * @return Response
+     * @return String view
      */
     public function index(Request $request) {
-        $datas = Cache::remember('topic.all.' . $request->cat, 1, function () use ($request) {
+        $view = Cache::remember('topic.all.' . $request->cat, 1, function () use ($request) {
             $cat = (int) $request->cat;
             $topics = $this->getAllTopics($cat);
             $category = App\Category::all();
@@ -36,16 +36,15 @@ class BoardController extends Controller
             if ($catName->isNotEmpty()) {
                 $catName = $catName->first()->title;
             } else if (!empty($cat)) {
-                return [];
+                return null;
             }
 
-            return ['topics' => $topics, 'category' => $category, 'cat' => $cat, 'catName' => $catName];
+            return view('board.index', compact('topics', 'category', 'cat', 'catName'))->render();
         });
-
-        if (empty($datas)) {
+        if ($view === null) {
             return redirect('/board');
         }
-        return view('board.index', $datas);
+        return $view;
     }
 
     /**
@@ -74,11 +73,11 @@ class BoardController extends Controller
      */
     public function show(Request $request, $id) {
 
-        $datas = Cache::remember('topic.' . $id, 1, function () use ($request, $id){
+        $view = Cache::remember('topic.' . $id, 1, function () use ($request, $id){
             $topic = App\Topic::with('comment', 'comment.user')->where('id', $id)->first();
 
             if (empty($topic)) {
-                return view('errors.topic404');
+                return view('errors.topic404')->render();
             }
 
             $headerTitle = 'Minecraft SkyRack - ' . $topic->title;
@@ -88,10 +87,11 @@ class BoardController extends Controller
             // Remove &nbsp;
             $headerDescription = str_replace("\xc2\xa0",' ',$headerDescription);
 
-            return compact('topic', 'headerTitle', 'headerDescription');
+            # return compact('topic', 'headerTitle', 'headerDescription');
+            return view('board.show', compact('topic', 'headerTitle', 'headerDescription'))->render();
         });
 
-        return view('board.show', $datas);
+        return $view;
     }
 
     /**
