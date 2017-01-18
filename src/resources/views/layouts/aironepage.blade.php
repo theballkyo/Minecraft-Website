@@ -80,7 +80,7 @@
     <!-- Copyright -->
     <div class="content container">
         <div class="row">
-            <div class="col-xs-6">Render at {{ date(DATE_RFC2822) }}
+            <div class="col-xs-6"> {{ PHP_Timer::resourceUsage() }}
             </div>
             <div class="col-xs-6 text-right">
                 <p class="margin-b-0"><a class="fweight-700" href="https://mc-skyrack.tk">MC SkyRack</a> Theme Powered by: <a class="fweight-700" href="http://www.keenthemes.com/">KeenThemes.com</a></p>
