@@ -101,7 +101,7 @@ class BoardController extends Controller
      */
     public function create() {
         $category = App\Category::all();
-        return view('topic.create', ['category' => $category]);
+        return view('board.create', ['category' => $category]);
     }
 
     /**
@@ -121,15 +121,22 @@ class BoardController extends Controller
             'category.*' => 'กรุณาเลือกหมวดหมู่ด้วย',
         ]);
 
+        App\Category::findOrFail($request->category);
+
         $topic = new App\Topic;
 
-        $topic->title = $request->title;
+        $topic->title = clean($request->title);
         $topic->body = clean($request->body);
         $topic->user_id = $request->user()->id;
         $topic->category_id = $request->category;
+        $topic->status = App\Topic::ACTIVE;
 
         $topic->save();
 
+        // Clear cache for board index
+        Cache::forget('topic.all.');
+        Cache::forget('topic.all.' . $request->category);
+        
         return redirect()->action('BoardController@show', ['id' => $topic->id]);
     }
 
