@@ -18,7 +18,7 @@
                         <div class="server-ip">play.mc-skyrack.tk</div>
                     </h3>
                     <h3><b>VERSION:</b>
-                        <div class="server-ip">1.11.2</div>
+                        <div class="server-ip">{{ env('MC_VERSION', '1.11.2') }}</div>
                     </h3>
                     <p></p>
                 </div>
