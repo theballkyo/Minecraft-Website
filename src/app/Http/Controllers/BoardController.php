@@ -238,7 +238,10 @@ class BoardController extends Controller
             return redirect()->action('BoardController@show', ['id' => $topic->id]);
         }
 
-        return view('topic.edit', ['topic' => $topic]);
+        // Clear cache for board index
+        Cache::forget('topic.' . $topic->id);
+
+        return view('board.edit', ['topic' => $topic]);
     }
 
     /**
