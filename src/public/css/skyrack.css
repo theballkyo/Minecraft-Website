@@ -55,3 +55,12 @@
 .error {
     color: #ff4141;
 }
+#board {
+    background: url(../img/1920x1080/01.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.table--board {
+    background: white;
+}

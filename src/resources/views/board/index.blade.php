@@ -17,7 +17,7 @@
                     <div class="board-button">
                         <a class="btn btn-default" href="{{ action('BoardController@create') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> สร้างกระทู้</a>
                     </div>
-                    <table class="table table-hover">
+                    <table class="table table-hover table--board">
                         <thead>
                         <tr>
                             <th width="50%">Title</th>
