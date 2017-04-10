@@ -61,19 +61,19 @@
     </target>
 
     <target name="clean-composer" depends="composer.check" if="composer.lock.exist.in.gitignore" description="Cleanup composer artifacts">
-        <delete file="${basedir}/composer.lock" />
+        <delete file="${src-dir}composer.lock" />
     </target>
 
     <target name="composer-install" depends="composer.check" unless="composer.lock.exist.in.gitignore" description="Installing dependencies">
         <echo>Installing dependencies</echo>
-        <exec executable="composer" failonerror="true">
+        <exec executable="composer" failonerror="true" dir="${src-dir}">
             <arg value="install" />
         </exec>
     </target>
 
     <target name="composer-update" depends="composer.check" if="composer.lock.exist.in.gitignore" description="Updating dependencies">
         <echo>Updating dependencies</echo>
-        <exec executable="composer" failonerror="true">
+        <exec executable="composer" failonerror="true" dir="${src-dir}">
             <arg value="update" />
         </exec>
     </target>
