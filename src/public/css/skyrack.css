@@ -61,7 +61,7 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
-#board::before {
+#board:before {
     background: rgba(81,87,105,.4);
 }
 .table--board {
@@ -75,4 +75,5 @@
 }
 .fb-box {
     background-color: white;
+    margin-top: 20px;
 }
