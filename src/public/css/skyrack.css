@@ -64,3 +64,9 @@
 .table--board {
     background: white;
 }
+.board-button {
+    margin-bottom: 20px;
+}
+.board--category {
+    margin-bottom: 20px;
+}
