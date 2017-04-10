@@ -93,6 +93,7 @@
             <arg value="--jdepend-xml=${build-dir}/logs/jdepend.xml" />
             <arg value="--jdepend-chart=${build-dir}/pdepend/dependencies.svg" />
             <arg value="--overview-pyramid=${build-dir}/pdepend/overview-pyramid.svg" />
+            <arg value="--ignore=${src-dir}/vendor/"/>
             <arg path="${src-dir}" />
         </exec>
     </target>
@@ -113,6 +114,8 @@
             <arg value="--log-pmd" />
             <arg value="${build-dir}/logs/pmd-cpd.xml" />
             <arg path="${src-dir}" />
+            <arg value="--exclude"/>
+            <arg value="${src-dir}/vendor/"/>
         </exec>
     </target>
 
@@ -147,6 +150,8 @@
            <arg value="--log-xml" />
            <arg value="${build-dir}/logs/phploc.xml" />
            <arg path="${src-dir}" />
+           <arg value="--exclude"/>
+           <arg value="${src-dir}/vendor/"/>
         </exec>
     </target>
 
@@ -155,6 +160,8 @@
             <arg path="${src-dir}" />
             <arg value="text" />
             <arg value="${build-dir}/phpmd.xml" />
+            <arg value="--exclude"/>
+            <arg value="${src-dir}/vendor/*"/>
         </exec>
     </target>
 
