@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Cache;
 
 class BoardController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth', ['except' => [
             'index',
             'show',
@@ -22,13 +23,14 @@ class BoardController extends Controller
 
     /**
      * Show all topics
-     * @param  Request  $request
+     * @param  Request $request
      *
      * @return String view
      */
-    public function index(Request $request) {
-        $view = Cache::remember('topic.all.' . $request->cat, 1, function () use ($request) {
-            $cat = (int) $request->cat;
+    public function index(Request $request)
+    {
+        $data = Cache::remember('topic.all.' . $request->cat, 1, function () use ($request) {
+            $cat = (int)$request->cat;
             $topics = $this->getAllTopics($cat);
             $category = App\Category::all();
             $catName = collect($category)->where('id', $cat);
@@ -39,12 +41,14 @@ class BoardController extends Controller
                 return null;
             }
 
-            return view('board.index', compact('topics', 'category', 'cat', 'catName'))->render();
+            return compact('topics', 'category', 'cat', 'catName');
         });
-        if ($view === null) {
+
+        if ($data === null) {
             return redirect('/board');
         }
-        return $view;
+
+        return view('board.index', $data);
     }
 
     /**
@@ -54,10 +58,11 @@ class BoardController extends Controller
      *
      * @return mixed
      */
-    private function getAllTopics(int $category) {
+    private function getAllTopics(int $category)
+    {
         $topics = App\Topic::with('user', 'category')->orderBy('status', 'desc')->orderBy('updated_at', 'desc')->active();
 
-        if(!empty($category)) {
+        if (!empty($category)) {
             $topics->where('category_id', $category);
         }
 
@@ -67,17 +72,19 @@ class BoardController extends Controller
     /**
      * Show the topic
      *
-     * @param  Request  $request
-     * @param  Int      $id       Topic Id
+     * @param  Request $request
+     * @param  Int $id Topic Id
+     *
      * @return Response
      */
-    public function show(Request $request, $id) {
+    public function show(Request $request, $id)
+    {
 
-        $view = Cache::remember('topic.' . $id, 1, function () use ($request, $id){
-            $topic = App\Topic::with('comment', 'comment.user')->where('id', $id)->first();
+        $data = Cache::remember('topic.' . $id, 1, function () use ($request, $id) {
+            $topic = App\Topic::with('comment', 'comment.user', 'category')->where('id', $id)->first();
 
             if (empty($topic)) {
-                return view('errors.topic404')->render();
+                return null;
             }
 
             $headerTitle = 'Minecraft SkyRack - ' . $topic->title;
@@ -85,13 +92,16 @@ class BoardController extends Controller
 
             $headerDescription = trim(preg_replace('/\s+/', ' ', $headerDescription));
             // Remove &nbsp;
-            $headerDescription = str_replace("\xc2\xa0",' ',$headerDescription);
+            $headerDescription = str_replace("\xc2\xa0", ' ', $headerDescription);
 
-            # return compact('topic', 'headerTitle', 'headerDescription');
-            return view('board.show', compact('topic', 'headerTitle', 'headerDescription'))->render();
+            return compact('topic', 'headerTitle', 'headerDescription');
         });
 
-        return $view;
+        if ($data === null) {
+            return redirect()->action('BoardController@index');
+        }
+
+        return view('board.show', $data);
     }
 
     /**
@@ -99,18 +109,21 @@ class BoardController extends Controller
      *
      * @return Response
      */
-    public function create() {
+    public function create()
+    {
         $category = App\Category::all();
-        return view('topic.create', ['category' => $category]);
+        return view('board.create', ['category' => $category]);
     }
 
     /**
      * Store the topic
      *
-     * @param  Request  $request
+     * @param  Request $request
+     *
      * @return Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $this->validate($request, [
             'title' => 'required|max:128|min:12',
             'body' => 'required|min:32',
@@ -121,25 +134,34 @@ class BoardController extends Controller
             'category.*' => 'กรุณาเลือกหมวดหมู่ด้วย',
         ]);
 
+        App\Category::findOrFail($request->category);
+
         $topic = new App\Topic;
 
-        $topic->title = $request->title;
+        $topic->title = clean($request->title);
         $topic->body = clean($request->body);
         $topic->user_id = $request->user()->id;
         $topic->category_id = $request->category;
+        $topic->status = App\Topic::ACTIVE;
 
         $topic->save();
 
+        // Clear cache for board index
+        Cache::forget('topic.all.');
+        Cache::forget('topic.all.' . $request->category);
+        
         return redirect()->action('BoardController@show', ['id' => $topic->id]);
     }
 
     /**
      * Redirect reply if not have ID topic to reply
      *
-     * @param  Request  $request
+     * @param  Request $request
+     *
      * @return Response
      */
-    public function replyRedirect(Request $request) {
+    public function replyRedirect(Request $request)
+    {
         return redirect()->action('BoardController@index');
     }
 
@@ -150,7 +172,8 @@ class BoardController extends Controller
      * @param int @id
      * @return Response
      */
-    public function reply(Request $request, int $id) {
+    public function reply(Request $request, int $id)
+    {
         $topic = App\Topic::find($id);
 
         if (empty($topic)) {
@@ -166,7 +189,8 @@ class BoardController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function storeReply(Request $request) {
+    public function storeReply(Request $request)
+    {
         $this->validate($request, [
             'body' => 'required|min:8|max:512',
             'id' => 'required',
@@ -198,11 +222,12 @@ class BoardController extends Controller
     /**
      * Show edit topic page
      *
-     * @param  Request  $Request
-     * @param  Int      $id
+     * @param  Request $Request
+     * @param  Int $id
      * @return Response
      */
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $topic = App\Topic::find($id);
 
         if (empty($topic)) {
@@ -213,17 +238,21 @@ class BoardController extends Controller
             return redirect()->action('BoardController@show', ['id' => $topic->id]);
         }
 
-        return view('topic.edit', ['topic' => $topic]);
+        // Clear cache for board index
+        Cache::forget('topic.' . $topic->id);
+
+        return view('board.edit', ['topic' => $topic]);
     }
 
     /**
      * Update the topic
      *
-     * @param  Request  $request
-     * @param Int      $id
+     * @param  Request $request
+     * @param Int $id
      * @return Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $this->validate($request, [
             'title' => 'required|max:128|min:12',
             'body' => 'required|min:32',
@@ -253,11 +282,12 @@ class BoardController extends Controller
     /**
      * Show confirm delete topic page
      *
-     * @param  Request  $request
-     * @param  Int      $id
+     * @param  Request $request
+     * @param  Int $id
      * @return Response
      */
-    public function deleteConfirm(Request $request, $id) {
+    public function deleteConfirm(Request $request, $id)
+    {
         $topic = App\Topic::find($id);
 
         if (empty($topic)) {
@@ -274,11 +304,12 @@ class BoardController extends Controller
     /**
      * Remove topic
      *
-     * @param  Request  $request
-     * @param  Int      $id
+     * @param  Request $request
+     * @param  Int $id
      * @return Response
      */
-    public function destroy(Request $request, $id) {
+    public function destroy(Request $request, $id)
+    {
         $topic = App\Topic::find($id);
 
         if (empty($topic)) {
@@ -299,11 +330,12 @@ class BoardController extends Controller
     /**
      * Toggle pin topic
      *
-     * @param  Request  $request
-     * @param  Int      $id
+     * @param  Request $request
+     * @param  Int $id
      * @return Response
      */
-    public function pin(Request $request, $id) {
+    public function pin(Request $request, $id)
+    {
         $topic = App\Topic::find($id);
 
         if (empty($topic)) {
@@ -324,11 +356,12 @@ class BoardController extends Controller
     /**
      * Toggle lock topic
      *
-     * @param  Request  $request
-     * @param  Int      $id
+     * @param  Request $request
+     * @param  Int $id
      * @return Response
      */
-    public function lock(Request $request, $id) {
+    public function lock(Request $request, $id)
+    {
         $topic = App\Topic::find($id);
 
         if (empty($topic)) {
@@ -346,4 +379,5 @@ class BoardController extends Controller
         return redirect()->action('BoardController@show', ['id' => $topic->id]);
     }
 }
+
 ?>

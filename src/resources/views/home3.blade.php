@@ -15,10 +15,10 @@
                     <h2>Server Status</h2>
                     <h2 id="server-status" class="server--on">[กำลังตรวจสอบสถานะ]</h2>
                     <h3><b>IP:</b>
-                        <div class="server-ip">play.mc-skyrack.tk</div>
+                        <div class="server-ip">{{ env('MC_HOST', 'localhost') }}</div>
                     </h3>
                     <h3><b>VERSION:</b>
-                        <div class="server-ip">1.11.2</div>
+                        <div class="server-ip">{{ env('MC_VERSION', '1.11.2') }}</div>
                     </h3>
                     <p></p>
                 </div>
@@ -101,13 +101,13 @@
     </div>
     <!-- End Testimonials -->
 @endsection
-@section('script')
+@push('script')
     <script>
 
         $(document).ready(function () {
             var $game_info = $("#server-status");
             var request = $.ajax({
-                url: "//mcapi.ca/query/mc.ezdev.me/info",
+                url: "//mcapi.ca/query/{{ env('MC_HOST', 'localhost') }}/info",
                 method: "POST",
                 dataType: "json"
             });
@@ -136,4 +136,4 @@
         });
 
     </script>
-@endsection
+@endpush

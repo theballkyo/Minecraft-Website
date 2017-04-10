@@ -19,17 +19,24 @@
     display: inline;
     color: #87d017;
 }
-board-title {
-    margin-bottom: 2px;
+.board-topic {
+    padding: 5px 15px;
+    background-color: whitesmoke;
+}
+.board-title {
+    margin-bottom: 0px;
 }
 
 .board-poster {
     color: #797979;
     font-size: 12px;
+    border-top: 1px solid #d4d4d4;
+    padding: 10px 0px;
 }
 
 .board-body {
-    margin-top: 20px;
+    margin-top: 10px;
+    /* border-bottom: 1px solid #d4d4d4; */
 }
 
 .breadcrumb li, .breadcrumb li a {

@@ -20,8 +20,25 @@
                     </ol>
                     <div class="board-topic">
                         <h2 class="board-title">{{ $topic->title }}</h2>
-                        <div class="board-poster">Posted by {{ $topic->user->realname }} on {{ $topic->created_at    }}</div>
                         <div class="board-body">{!! $topic->body !!}</div>
+                        <div class="board-poster">Posted by {{ $topic->user->realname }} on {{ $topic->created_at }}
+                            @if ($topic->canEdit())
+                                <a href="{{ action('BoardController@edit', ['id' => $topic->id]) }}" class="btn btn-default"><span class="glyphicon glyphicon-wrench"></span> แก้ไข</a>
+                                @if ($topic->isLock())
+                                    @if ($topic->canUnlock())
+                                        <a href="{{ action('BoardController@lock', ['id' => $topic->id]) }}" class="btn btn-danger"><span class="glyphicon glyphicon-ok-circle color-white"></span> เปิดกระทู้</a>
+                                    @endif
+                                    {{--Nothing to show--}}
+                                @else
+                                    <a href="{{ action('BoardController@lock', ['id' => $topic->id]) }}" class="btn btn-danger"> <span class="glyphicon glyphicon-ban-circle color-white"></span> ปิดกระทู้</a>
+                                @if ($topic->canPin())
+                                    <a href="{{ action('BoardController@pin', ['id' => $topic->id]) }}" class="btn btn-warning">
+                                        <span class="glyphicon glyphicon-pushpin color-white"></span>   {{ $topic->isPin() ? 'ยกเลิกปักหมุด' : 'ปักหมุด' }}
+                                    </a>
+                                 @endif
+                                @endif
+                            @endif
+                        </div>
                         <div class="board-footer"></div>
                     </div>
                     <div class="fb-comments" data-href="{{ url()->full() }}" data-width="100%" data-numposts="5"></div>

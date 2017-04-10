@@ -80,7 +80,7 @@
     <!-- Copyright -->
     <div class="content container">
         <div class="row">
-            <div class="col-xs-6">Render at {{ date(DATE_RFC2822) }}
+            <div class="col-xs-6"> {{ PHP_Timer::resourceUsage() }}
             </div>
             <div class="col-xs-6 text-right">
                 <p class="margin-b-0"><a class="fweight-700" href="https://mc-skyrack.tk">MC SkyRack</a> Theme Powered by: <a class="fweight-700" href="http://www.keenthemes.com/">KeenThemes.com</a></p>
@@ -110,7 +110,6 @@
 <script src="{{ url('/vendor/magnific-popup/jquery.magnific-popup.min.js') }}" type="text/javascript"></script>
 <script src="{{ url('/vendor/masonry/jquery.masonry.pkgd.min.js') }}" type="text/javascript"></script>
 <script src="{{ url('/vendor/masonry/imagesloaded.pkgd.min.js') }}" type="text/javascript"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsXUGTFS09pLVdsYEE9YrO2y4IAncAO2U&amp;callback=initMap" async defer></script>
 
 <!-- PAGE LEVEL SCRIPTS -->
 <script src="{{ url('/js/layout.min.js') }}" type="text/javascript"></script>
@@ -118,9 +117,8 @@
 <script src="{{ url('/js/components/swiper.min.js') }}" type="text/javascript"></script>
 <script src="{{ url('/js/components/maginific-popup.min.js') }}" type="text/javascript"></script>
 <script src="{{ url('/js/components/masonry.min.js') }}" type="text/javascript"></script>
-<script src="{{ url('/js/components/gmap.min.js') }}" type="text/javascript"></script>
 
-@yield('script')
+@stack('script')
 </body>
 <!-- END BODY -->
 </html>

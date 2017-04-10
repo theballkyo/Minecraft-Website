@@ -14,6 +14,9 @@
                             <li class="active">Webboard</li>
                         @endif
                     </ol>
+                    <div class="board-button">
+                        <a class="btn btn-default" href="{{ action('BoardController@create') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> สร้างกระทู้</a>
+                    </div>
                     <table class="table table-hover">
                         <thead>
                         <tr>
@@ -32,7 +35,7 @@
                                 <td class="text-center">{{ $topic->updated_at }}</td>
                                 <td class="text-center">{{ $topic->user->realname }}</td>
                                 <td class="text-center"><a href="{{action('BoardController@index', ['cat' => $topic->category_id])}}"
-                                                           class="">{{ $topic->category->title }}</a></td>
+                                                           class="">{{ $topic->category->title or '-' }}</a></td>
                             </tr>
                         @endforeach
                         </tbody>
