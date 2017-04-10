@@ -61,19 +61,19 @@
     </target>
 
     <target name="clean-composer" depends="composer.check" if="composer.lock.exist.in.gitignore" description="Cleanup composer artifacts">
-        <delete file="${basedir}/composer.lock" />
+        <delete file="${src-dir}composer.lock" />
     </target>
 
     <target name="composer-install" depends="composer.check" unless="composer.lock.exist.in.gitignore" description="Installing dependencies">
         <echo>Installing dependencies</echo>
-        <exec executable="composer" failonerror="true">
+        <exec executable="composer" failonerror="true" dir="${src-dir}">
             <arg value="install" />
         </exec>
     </target>
 
     <target name="composer-update" depends="composer.check" if="composer.lock.exist.in.gitignore" description="Updating dependencies">
         <echo>Updating dependencies</echo>
-        <exec executable="composer" failonerror="true">
+        <exec executable="composer" failonerror="true" dir="${src-dir}">
             <arg value="update" />
         </exec>
     </target>
@@ -93,6 +93,7 @@
             <arg value="--jdepend-xml=${build-dir}/logs/jdepend.xml" />
             <arg value="--jdepend-chart=${build-dir}/pdepend/dependencies.svg" />
             <arg value="--overview-pyramid=${build-dir}/pdepend/overview-pyramid.svg" />
+            <arg value="--ignore=${src-dir}/vendor/"/>
             <arg path="${src-dir}" />
         </exec>
     </target>
@@ -113,6 +114,8 @@
             <arg value="--log-pmd" />
             <arg value="${build-dir}/logs/pmd-cpd.xml" />
             <arg path="${src-dir}" />
+            <arg value="--exclude"/>
+            <arg value="${src-dir}/vendor/"/>
         </exec>
     </target>
 
@@ -147,6 +150,8 @@
            <arg value="--log-xml" />
            <arg value="${build-dir}/logs/phploc.xml" />
            <arg path="${src-dir}" />
+           <arg value="--exclude"/>
+           <arg value="${src-dir}/vendor/"/>
         </exec>
     </target>
 
@@ -155,6 +160,8 @@
             <arg path="${src-dir}" />
             <arg value="text" />
             <arg value="${build-dir}/phpmd.xml" />
+            <arg value="--exclude"/>
+            <arg value="${src-dir}/vendor/*"/>
         </exec>
     </target>
 
@@ -169,7 +176,7 @@
     </target>
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
-        <exec executable="phpunit" failonerror="true">
+        <exec executable="phpunit" failonerror="true" dir="${src-dir}">
             <arg value="-c" />
             <arg value="${basedir}/phpunit.xml.dist" />
             <arg value="--coverage-html" />

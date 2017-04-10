@@ -17,7 +17,13 @@
                     <div class="board-button">
                         <a class="btn btn-default" href="{{ action('BoardController@create') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> สร้างกระทู้</a>
                     </div>
-                    <table class="table table-hover">
+                    <div class="board--category">
+                        <a href="?cat=3"><span class="label label-primary">ข่าวประกาศ</span></a>
+                        <a href="?cat=1"><span class="label label-primary">พูดคุยทั่วไป</span></a>
+                        <a href="?cat=2"><span class="label label-primary">วิธีการเล่น</span></a>
+                        <a href="?cat=4"><span class="label label-primary">กิจกรรม</span></a>
+                    </div>
+                    <table class="table table-hover table--board">
                         <thead>
                         <tr>
                             <th width="50%">Title</th>

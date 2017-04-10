@@ -55,3 +55,25 @@
 .error {
     color: #ff4141;
 }
+#board {
+    background-image: url(../img/1920x1080/01.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#board:before {
+    background: rgba(81,87,105,.4);
+}
+.table--board {
+    background: white;
+}
+.board-button {
+    margin-bottom: 20px;
+}
+.board--category {
+    margin-bottom: 20px;
+}
+.fb-box {
+    background-color: white;
+    margin-top: 20px;
+}
