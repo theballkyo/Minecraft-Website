@@ -14,7 +14,8 @@
         "laravel/framework": "5.4.*",
         "mews/purifier": "~2.0",
         "sentry/sentry": "^1.6",
-        "sentry/sentry-laravel": "^0.7.0"
+        "sentry/sentry-laravel": "^0.7.0",
+        "phpunit/php-timer": "^1.0.9"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
